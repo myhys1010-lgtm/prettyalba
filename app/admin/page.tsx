@@ -24,13 +24,28 @@ const regions: any = {
       "중구","동구","서구","남구","북구","수성구","달서구"
     ]
   },
+  인천: {
+    전체: [
+      "중구","동구","미추홀구","연수구","남동구","부평구","계양구","서구"
+    ]
+  },
+  광주: {
+    전체: ["동구","서구","남구","북구","광산구"]
+  },
+  대전: {
+    전체: ["동구","중구","서구","유성구","대덕구"]
+  },
+  울산: {
+    전체: ["중구","남구","동구","북구"]
+  },
   경기: {
     수원시: ["장안구","권선구","팔달구","영통구"],
     성남시: ["수정구","중원구","분당구"],
     안양시: ["만안구","동안구"],
     안산시: ["상록구","단원구"],
     고양시: ["덕양구","일산동구","일산서구"],
-    용인시: ["처인구","기흥구","수지구"]
+    용인시: ["처인구","기흥구","수지구"],
+    기타: ["부천시","화성시","평택시","광명시","시흥시","군포시","의왕시","하남시","오산시","이천시","안성시","김포시","파주시","양주시","구리시","남양주시","포천시","동두천시"]
   }
 };
 
@@ -64,7 +79,7 @@ export default function AdminPage() {
 
   return (
     <main className="bg-black min-h-screen text-white p-6">
-      <h1 className="text-2xl mb-6">관리자 페이지</h1>
+      <h1 className="text-2xl mb-6">🔥 관리자 페이지 (확장 완료)</h1>
 
       <div className="space-y-4">
 
@@ -75,7 +90,6 @@ export default function AdminPage() {
           className="w-full p-3 bg-gray-800 rounded"
         />
 
-        {/* city */}
         <select
           value={city}
           onChange={(e) => {
@@ -89,7 +103,6 @@ export default function AdminPage() {
           ))}
         </select>
 
-        {/* subCity */}
         <select
           value={subCity}
           onChange={(e) => setSubCity(e.target.value)}
@@ -100,7 +113,6 @@ export default function AdminPage() {
           ))}
         </select>
 
-        {/* district */}
         <select
           value={district}
           onChange={(e) => setDistrict(e.target.value)}
@@ -111,7 +123,6 @@ export default function AdminPage() {
           ))}
         </select>
 
-        {/* 카테고리 */}
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
