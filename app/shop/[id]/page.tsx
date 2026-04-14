@@ -6,8 +6,6 @@ import { supabase } from "@/lib/supabase";
 
 export default function ShopDetailPage() {
   const params = useParams();
-
-  // 🔥 핵심 수정 (문자 → 숫자)
   const id = Number(params.id);
 
   const [shop, setShop] = useState<any>(null);
@@ -17,14 +15,15 @@ export default function ShopDetailPage() {
       const { data, error } = await supabase
         .from("shops")
         .select("*")
-        .eq("id", id)
-        .single();
+        .eq("id", id);
 
       if (error) {
         console.log("에러:", error);
+        return;
       }
 
-      setShop(data);
+      // 🔥 배열 → 첫번째 데이터
+      setShop(data && data.length > 0 ? data[0] : null);
     };
 
     fetchShop();
