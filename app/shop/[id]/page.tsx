@@ -1,43 +1,55 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { shops } from "@/data/shops";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function ShopDetailPage() {
   const params = useParams();
-  const router = useRouter();
 
+  // 🔥 핵심 수정 (문자 → 숫자)
   const id = Number(params.id);
 
-  const shop = shops.find((s) => s.id === id);
+  const [shop, setShop] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchShop = async () => {
+      const { data, error } = await supabase
+        .from("shops")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.log("에러:", error);
+      }
+
+      setShop(data);
+    };
+
+    fetchShop();
+  }, [id]);
 
   if (!shop) {
-    return (
-      <main className="bg-black min-h-screen text-white p-6">
-        업소 없음
-      </main>
-    );
+    return <div className="text-white p-6">업소 없음</div>;
   }
 
   return (
     <main className="bg-black min-h-screen text-white p-6">
 
-      {/* 뒤로가기 */}
-      <button
-        onClick={() => router.back()}
-        className="mb-4 text-pink-400"
-      >
-        ← 뒤로가기
-      </button>
+      <img
+        src={shop.image_url || "https://via.placeholder.com/500"}
+        className="w-full h-60 object-cover rounded-xl mb-4"
+      />
 
-      {/* 업소 이름 */}
-      <h1 className="text-2xl font-bold mb-4">
-        {shop.name}
-      </h1>
+      <h1 className="text-2xl font-bold mb-2">{shop.name}</h1>
 
-      {/* 정보 */}
-      <div className="bg-gray-800 p-4 rounded-xl">
+      <div className="text-gray-400 mb-2">
         지역: {shop.region}
+      </div>
+
+      <div className="text-gray-400 mb-4">
+        카테고리: {shop.category}
       </div>
 
     </main>
