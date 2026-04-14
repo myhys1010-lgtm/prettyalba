@@ -18,7 +18,7 @@ export default function AdminPage() {
       {
         name,
         region,
-        category,
+        category, // 🔥 핵심
       },
     ]);
 
@@ -37,6 +37,7 @@ export default function AdminPage() {
 
       <div className="space-y-4">
 
+        {/* 업소 이름 */}
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -44,6 +45,7 @@ export default function AdminPage() {
           className="w-full p-3 bg-gray-800 rounded"
         />
 
+        {/* 지역 */}
         <select
           value={region}
           onChange={(e) => setRegion(e.target.value)}
@@ -54,6 +56,7 @@ export default function AdminPage() {
           <option value="daegu">대구</option>
         </select>
 
+        {/* 🔥 카테고리 추가 */}
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -64,6 +67,7 @@ export default function AdminPage() {
           <option value="bar">술집</option>
         </select>
 
+        {/* 버튼 */}
         <button
           onClick={handleAdd}
           className="bg-pink-500 p-3 w-full rounded"
