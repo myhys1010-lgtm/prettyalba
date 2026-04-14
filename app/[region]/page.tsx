@@ -31,7 +31,7 @@ export default function RegionPage() {
 
       <h1 className="text-2xl mb-4">{region} 업소</h1>
 
-      {/* 🔥 카테고리 버튼 */}
+      {/* 카테고리 버튼 */}
       <div className="flex gap-2 mb-6">
         {["all", "food", "cafe", "bar"].map((cat) => (
           <button
@@ -46,8 +46,8 @@ export default function RegionPage() {
         ))}
       </div>
 
-      {/* 리스트 */}
-      <div className="space-y-4">
+      {/* 카드 UI */}
+      <div className="grid grid-cols-2 gap-4">
         {shops.length === 0 && (
           <div>등록된 업소가 없습니다</div>
         )}
@@ -55,9 +55,19 @@ export default function RegionPage() {
         {shops.map((shop) => (
           <div
             key={shop.id}
-            className="bg-gray-800 p-4 rounded-xl"
+            className="bg-gray-800 rounded-xl overflow-hidden"
           >
-            {shop.name} ({shop.category})
+            <img
+              src={shop.image_url || "https://via.placeholder.com/300"}
+              className="w-full h-40 object-cover"
+            />
+
+            <div className="p-3">
+              <div className="font-bold">{shop.name}</div>
+              <div className="text-sm text-gray-400">
+                {shop.category}
+              </div>
+            </div>
           </div>
         ))}
       </div>
