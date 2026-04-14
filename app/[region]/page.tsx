@@ -31,7 +31,7 @@ export default function RegionPage() {
 
       <h1 className="text-2xl mb-4">{region} 업소</h1>
 
-      {/* 카테고리 필터 */}
+      {/* 🔥 카테고리 버튼 */}
       <div className="flex gap-2 mb-6">
         {["all", "food", "cafe", "bar"].map((cat) => (
           <button
@@ -48,6 +48,10 @@ export default function RegionPage() {
 
       {/* 리스트 */}
       <div className="space-y-4">
+        {shops.length === 0 && (
+          <div>등록된 업소가 없습니다</div>
+        )}
+
         {shops.map((shop) => (
           <div
             key={shop.id}
