@@ -3,10 +3,21 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
+const regions: any = {
+  서울: [
+    "강남구","서초구","송파구","강동구",
+    "마포구","용산구","중구","종로구"
+  ],
+  부산: [
+    "해운대구","수영구","부산진구","동래구"
+  ]
+};
+
 export default function AdminPage() {
   const [name, setName] = useState("");
-  const [region, setRegion] = useState("seoul");
-  const [category, setCategory] = useState("food");
+  const [city, setCity] = useState("서울");
+  const [district, setDistrict] = useState("강남구");
+  const [category, setCategory] = useState("room");
   const [imageUrl, setImageUrl] = useState("");
 
   const handleAdd = async () => {
@@ -18,7 +29,8 @@ export default function AdminPage() {
     const { error } = await supabase.from("shops").insert([
       {
         name,
-        region,
+        city,
+        district,
         category,
         image_url: imageUrl,
       },
@@ -47,14 +59,29 @@ export default function AdminPage() {
           className="w-full p-3 bg-gray-800 rounded"
         />
 
+        {/* 🔥 city 선택 */}
         <select
-          value={region}
-          onChange={(e) => setRegion(e.target.value)}
+          value={city}
+          onChange={(e) => {
+            setCity(e.target.value);
+            setDistrict(regions[e.target.value][0]);
+          }}
           className="w-full p-3 bg-gray-800 rounded"
         >
-          <option value="seoul">서울</option>
-          <option value="busan">부산</option>
-          <option value="daegu">대구</option>
+          {Object.keys(regions).map((c) => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
+
+        {/* 🔥 district 선택 */}
+        <select
+          value={district}
+          onChange={(e) => setDistrict(e.target.value)}
+          className="w-full p-3 bg-gray-800 rounded"
+        >
+          {regions[city].map((d: string) => (
+            <option key={d}>{d}</option>
+          ))}
         </select>
 
         <select
@@ -62,12 +89,13 @@ export default function AdminPage() {
           onChange={(e) => setCategory(e.target.value)}
           className="w-full p-3 bg-gray-800 rounded"
         >
-          <option value="food">음식점</option>
-          <option value="cafe">카페</option>
-          <option value="bar">술집</option>
+          <option value="room">룸살롱</option>
+          <option value="karaoke">노래방</option>
+          <option value="bar">유흥주점</option>
+          <option value="club">클럽</option>
+          <option value="massage">마사지</option>
         </select>
 
-        {/* 🔥 이미지 URL 입력 */}
         <input
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
