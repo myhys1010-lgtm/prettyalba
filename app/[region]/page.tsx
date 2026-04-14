@@ -1,64 +1,59 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function RegionPage() {
   const params = useParams();
-  const router = useRouter();
+  const region = String(params.region).toLowerCase();
 
   const [shops, setShops] = useState<any[]>([]);
-  const [region, setRegion] = useState("");
+  const [category, setCategory] = useState("all");
 
   useEffect(() => {
-    if (!params?.region) return;
-
-    const regionValue = String(params.region).toLowerCase();
-    setRegion(regionValue);
-
     const fetchShops = async () => {
-      // 🔥 일단 region 조건 제거 (테스트용)
-      const { data, error } = await supabase
-        .from("shops")
-        .select("*");
+      let query = supabase.from("shops").select("*").eq("region", region);
 
-      console.log("지역:", regionValue);
-      console.log("전체 데이터:", data);
-      console.log("에러:", error);
+      if (category !== "all") {
+        query = query.eq("category", category);
+      }
 
+      const { data } = await query;
       setShops(data || []);
     };
 
     fetchShops();
-  }, [params]);
+  }, [region, category]);
 
   return (
     <main className="bg-black min-h-screen text-white p-6">
 
-      <button
-        onClick={() => router.push("/")}
-        className="mb-4 text-pink-400"
-      >
-        ← 뒤로가기
-      </button>
+      <h1 className="text-2xl mb-4">{region} 업소</h1>
 
-      <h1 className="text-2xl font-bold mb-6">
-        {region} 업소 리스트
-      </h1>
+      {/* 카테고리 필터 */}
+      <div className="flex gap-2 mb-6">
+        {["all", "food", "cafe", "bar"].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-4 py-2 rounded ${
+              category === cat ? "bg-pink-500" : "bg-gray-700"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
-      {shops.length === 0 && (
-        <div>등록된 업소가 없습니다</div>
-      )}
-
+      {/* 리스트 */}
       <div className="space-y-4">
         {shops.map((shop) => (
           <div
             key={shop.id}
-            onClick={() => router.push(`/shop/${shop.id}`)}
-            className="bg-gray-800 p-4 rounded-xl cursor-pointer hover:bg-pink-500"
+            className="bg-gray-800 p-4 rounded-xl"
           >
-            {shop.name} ({shop.region})
+            {shop.name} ({shop.category})
           </div>
         ))}
       </div>

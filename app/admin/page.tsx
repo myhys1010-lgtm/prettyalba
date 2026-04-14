@@ -6,25 +6,24 @@ import { supabase } from "@/lib/supabase";
 export default function AdminPage() {
   const [name, setName] = useState("");
   const [region, setRegion] = useState("seoul");
+  const [category, setCategory] = useState("food");
 
   const handleAdd = async () => {
     if (!name) {
-      alert("업소 이름 입력해");
+      alert("업소 이름 입력");
       return;
     }
 
-    const { data, error } = await supabase.from("shops").insert([
+    const { error } = await supabase.from("shops").insert([
       {
         name,
         region,
+        category,
       },
     ]);
 
-    console.log("data:", data);
-    console.log("error:", error);
-
     if (error) {
-      alert("에러: " + error.message);
+      alert(error.message);
     } else {
       alert("등록 완료");
     }
@@ -34,10 +33,7 @@ export default function AdminPage() {
 
   return (
     <main className="bg-black min-h-screen text-white p-6">
-
-      <h1 className="text-2xl mb-6">
-        관리자 페이지
-      </h1>
+      <h1 className="text-2xl mb-6">관리자 페이지</h1>
 
       <div className="space-y-4">
 
@@ -58,6 +54,16 @@ export default function AdminPage() {
           <option value="daegu">대구</option>
         </select>
 
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="w-full p-3 bg-gray-800 rounded"
+        >
+          <option value="food">음식점</option>
+          <option value="cafe">카페</option>
+          <option value="bar">술집</option>
+        </select>
+
         <button
           onClick={handleAdd}
           className="bg-pink-500 p-3 w-full rounded"
@@ -66,7 +72,6 @@ export default function AdminPage() {
         </button>
 
       </div>
-
     </main>
   );
 }
